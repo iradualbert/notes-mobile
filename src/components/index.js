@@ -9,3 +9,4 @@ export { Center } from "./FlexBox";
 export { default as NavigationBar } from "./NavigationBar";
 export { default as Picker } from "./Picker";
 export { default as Typography } from "./Typography";
+export { default as Category } from "./Channels/Category";

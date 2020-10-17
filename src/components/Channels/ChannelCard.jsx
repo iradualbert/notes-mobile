@@ -7,6 +7,7 @@ import {
     Image,
     TouchableOpacity
 } from "react-native";
+import Category from "./Category";
 import { colors, sizes } from "../../constants"
 /**
  *
@@ -33,7 +34,7 @@ const ChannelCard = ({channel}) => {
                 <TouchableOpacity onPress={navigateChannel}>
                     <Text style={styles.name}>{name}</Text>
                 </TouchableOpacity>
-                <Text style={styles.cat}>{cat}</Text>
+                <Category cat={cat} />
             </View>
         </View>
     )
@@ -54,12 +55,6 @@ const styles = StyleSheet.create({
         fontWeight: "400",
         marginBottom: 4
     },
-    cat: {
-        backgroundColor: colors.light,
-        textAlign: "center",
-        paddingHorizontal: 5,
-        paddingVertical: 5,
-        borderRadius: 10
-    }
+   
 })
 export default ChannelCard;

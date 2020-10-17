@@ -1,22 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { 
+import {
     View,
     Image,
-    StyleSheet, 
-    Text, 
-    ScrollView, 
-    Dimensions, 
+    StyleSheet,
+    Text,
+    ScrollView,
+    Dimensions,
     TouchableOpacity
 } from "react-native";
-import ReadMore from "react-native-read-more-text";
-import { Typography, Button } from "../../components";
+import { useNavigation } from "@react-navigation/native";
+import { Typography, Button, Category } from "../../components";
 import { colors } from "../../constants";
 import axios from "axios";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, FontAwesome, EvilIcons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get("window")
 
-const ChannelScreen = ({ navigation, route }) => {
+const ProductCard = ({ product }) => {
+    const [isSaved, setIsSaved] = useState(false);
+    const navigation = useNavigation();
+    const handleSave = () => {
+        setIsSaved(prevState => !prevState)
+    }
+    return (
+        <View style={styles.card}>
+            <TouchableOpacity onPress={() => navigation.navigate('Product', { product })}>
+                <Image style={styles.productPhoto} source={{ uri: product.photo }} />
+            </TouchableOpacity>
+            <View style={[styles.row, styles.productContent]}>
+                <View>
+                    <Typography fontSize={16}>{product.name}</Typography>
+                    <View style={styles.row}>
+                        <Text style={styles.price}>{product.price}</Text>
+                        <Category cat={product.cat} />
+                    </View>
+                    <View style={{ flexDirection: "row", marginVertical: 10, alignItems: "center" }} >
+                        <FontAwesome name="star" color="#FFBA5A" size={12} />
+                        <Text style={{ marginLeft: 4, color: "#FFBA5A" }}>
+                            {product.average_rate}
+                        </Text>
+                        <Text style={{ marginLeft: 20, color: "#FFBA5A" }}>
+                            {product.total_reviews} Reviews
+                        </Text>
+                    </View>
+                </View>
+                <TouchableOpacity onPress={handleSave}>
+                    <MaterialCommunityIcons
+                        name={isSaved ? "bookmark" : "bookmark-outline"}
+                        size={24}
+                        color={colors.primary}
+                    />
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+}
+
+const ChannelScreen = ({ route }) => {
     const { channel } = route.params;
     const [listing, setListings] = useState([]);
     const [suggestedProducts, setSuggestedProducts] = useState({
@@ -27,33 +67,24 @@ const ChannelScreen = ({ navigation, route }) => {
     const [loadingSub, setLoadingSub] = useState(true);
     const [user, setUser] = useState({});
     const [subscribers, setSubscribers] = useState(0);
-    const {
-        name,
-        id,
-        photo,
-        contact,
-        cat,
-        address,
-    } = channel;
-
     useEffect(() => {
         _loadProducts()
     }, []);
 
     const _loadProducts = async () => {
-        try{
+        try {
             const { data } = await axios.get('/products/', {
                 params: {
                     offset: suggestedProducts.offset
                 }
             });
             const { products, more_available } = data;
-            setSuggestedProducts( prevState => ({
+            setSuggestedProducts(prevState => ({
                 products: [...prevState.products, ...products],
                 moreAvailable: more_available,
                 offset: prevState.offset + products.length
             }))
-        } catch(err){
+        } catch (err) {
             console.log(err)
         }
     };
@@ -62,74 +93,61 @@ const ChannelScreen = ({ navigation, route }) => {
         return (
             <View style={[styles.products, styles.row]}>
                 {products.map(product => (
-                    <View style={styles.card} key={product.id}>
-                       <Image style={styles.productPhoto} source={{uri: product.photo}} />
-                       <View style={styles.row}>
-                            <View>
-                                <Typography fontSize={16}>{product.name}</Typography>
-                            </View>
-                            <TouchableOpacity>
-                                <MaterialCommunityIcons name="bookmark-outline" size={24} color={colors.primary} />
-                            </TouchableOpacity>
-                       </View>
-                    </View>
+                    <ProductCard
+                        key={product.id}
+                        product={product}
+                    />
                 ))}
             </View>
         )
-        
+
     };
-    const _renderTruncatedFooter = (handlePress) => {
-        return (
-            <Text style={{ color: colors.secondary, marginTop: 5 }} onPress={handlePress}>
-                Read more
-            </Text>
-        );
-    }
-
-    const _renderRevealedFooter = (handlePress) => {
-        return (
-            <Text style={{ color: colors.secondary, marginTop: 5 }} onPress={handlePress}>
-                Show less
-            </Text>
-        );
-    }
-
-    const _handleTextReady = () => {
-        // ...
-    }
 
     return (
         <ScrollView style={styles.container}>
             <Image source={{ uri: channel.photo }} style={styles.channelThumbnail} />
             <View style={styles.content}>
-                <Typography fontSize={20} style={{marginBottom: 10}}>{channel.name}</Typography>
-                <ReadMore
-                    numberOfLines={2}
-                    renderTruncatedFooter={_renderTruncatedFooter}
-                    renderRevealedFooter={_renderRevealedFooter}
-                    onReady={_handleTextReady}
-                    >
-                    <Typography fontSize={15}>{channel.bio}</Typography>
-                </ReadMore>
+                <View style={styles.row}>
+                    <Typography fontSize={20} style={{ marginBottom: 10 }}>{channel.name}</Typography>
+                    <Category cat={channel.cat} />
+                </View>
+                <Typography fontSize={15} numberOfLines={2}>{channel.bio}</Typography>
                 <Button style={styles.subscribeButton}>Subscribe</Button>
             </View>
-            <View style={styles.container}>
-               {renderProducts()}
+            <View style={styles.content}>
+                <View style={styles.contactInfo}>
+                    <EvilIcons name="location" size={16} color={colors.secondary} />
+                    <Typography
+                        style={styles.contactInfoText}
+                    >
+                        {"Cedit, Turan Güneş Cd. No:51, 41100 İzmit/Kocaeli"}
+                    </Typography>
+                </View>
+                <View style={styles.contactInfo}>
+                    <FontAwesome name="phone" size={16} color={colors.secondary} />
+                    <Typography style={styles.contactInfoText} >+90 553 172 32 28</Typography>
+                </View>
+                <View style={styles.contactInfo}>
+                    <MaterialCommunityIcons name="web" size={16} color={colors.secondary} />
+                    <Typography style={styles.contactInfoText}>{"https://www.gofundme.com"}</Typography>
+                </View>
             </View>
+            {renderProducts()}
         </ScrollView>
     )
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     channelThumbnail: {
         width: "100%",
         height: 200
     },
     content: {
-        padding: 15,
+        margin: 5,
+        padding: 10,
         backgroundColor: "white"
     },
     subscribeButton: {
@@ -141,18 +159,39 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
     },
+    contactInfo: {
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    contactInfoText: { 
+        fontSize: 15, 
+        color: "#A5A5A5",
+        padding: 5, 
+        marginLeft: 10 
+    }
+    ,
     products: {
         flexWrap: "wrap",
     },
     card: {
-        width: (width / 2) - 20,
+        width: (width / 2) - 10,
         backgroundColor: "white",
-        margin: 10
+        margin: 5
     },
     productPhoto: {
         height: 100,
         width: "100%"
-    }
-    
+    },
+    productContent: {
+        padding: 10
+    },
+    price: {
+        color: colors.secondary,
+        paddingHorizontal: 5,
+        paddingVertical: 5,
+        fontSize: 16
+    },
+
+
 });
 export default ChannelScreen;
