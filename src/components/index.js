@@ -10,3 +10,5 @@ export { default as NavigationBar } from "./NavigationBar";
 export { default as Picker } from "./Picker";
 export { default as Typography } from "./Typography";
 export { default as Category } from "./Channels/Category";
+export { default as Review } from "./Products/Review";
+export { default as Ratings } from "./Products/Ratings";

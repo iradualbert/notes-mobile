@@ -43,7 +43,7 @@ const Typography = ({
     if(numberOfLines){
         return (
             <ReadMore
-                numberOfLines={2}
+                numberOfLines={numberOfLines}
                 renderTruncatedFooter={_renderTruncatedFooter}
                 renderRevealedFooter={_renderRevealedFooter}
                 onReady={_handleTextReady}

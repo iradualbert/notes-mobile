@@ -5,7 +5,9 @@ import { TouchableOpacity, Text } from "react-native";
 import {
     Home,
     Product,
-    Channel
+    Channel,
+    ProductReviews,
+    WriteReview
 } from "../screens";
 import { UButton } from "../components";
 
@@ -22,7 +24,6 @@ const HomeStackScreen = () => {
                 gestureEnabled: true,
                 headerBackTitleVisible: false
             }}
-            
         >
 
             <HomeStack.Screen
@@ -48,7 +49,15 @@ const HomeStackScreen = () => {
             <HomeStack.Screen
                 name="Product"
                 component={Product} 
-                />
+            />
+            <HomeStack.Screen
+                name="Reviews"
+                component={ProductReviews} 
+            />
+            <HomeStack.Screen
+                name="Write Review"
+                component={WriteReview} 
+            />
         </HomeStack.Navigator>
     )
 }

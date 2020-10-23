@@ -9,7 +9,7 @@ import {
     TouchableOpacity
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Typography, Button, Category } from "../../components";
+import { Typography, Button, Category, Ratings } from "../../components";
 import { colors } from "../../constants";
 import axios from "axios";
 import { MaterialCommunityIcons, FontAwesome, EvilIcons } from '@expo/vector-icons';

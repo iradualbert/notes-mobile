@@ -6,3 +6,4 @@ export { default as Verification } from "./Confirm";
 export { default as Product } from "./Product";
 export { default as Profile } from "./Account";
 export { default as NewProduct } from "./NewProduct";
+export { ProductReviews, WriteReview } from "./Reviews";

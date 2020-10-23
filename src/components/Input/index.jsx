@@ -13,7 +13,7 @@ import {
 
 /**
  *
- * @param {{style: object, helperText: string, onTextChange: function, disabled: boolean, color: string, multiline: boolean, numberOfLines: number, placeholder: string, autoFocus: boolean}} props
+ * @param {{style: object, label: string, value: any, error: string, helperText: string, onTextChange: function, disabled: boolean, color: string, multiline: boolean, numberOfLines: number, placeholder: string, autoFocus: boolean}} props
  */
 function Input({
     helperText,
@@ -37,7 +37,7 @@ function Input({
     }
 
     const inputStyle = {
-        minHeight: (Platform.OS === "ios" && numberOfLines) ? numberOfLines * 30 :null,
+        minHeight: (Platform.OS === "ios" && numberOfLines && multiline) ? numberOfLines * 30 :null,
         borderColor: error ? colors.accent : colors.secondary,
     }
 

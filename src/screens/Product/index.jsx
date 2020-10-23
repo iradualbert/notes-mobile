@@ -3,23 +3,21 @@ import {
     View,
     Image,
     StyleSheet,
-    TouchableOpacity,
     ScrollView,
-    SafeAreaView,
     Dimensions,
 } from "react-native";
-import { MaterialCommunityIcons, MaterialIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { MaterialCommunityIcons, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import axios from "axios";
 import { colors } from "../../constants";
-import { Typography, Button, Category } from "../../components";
+import { Typography, Category, Review, Ratings, UButton } from "../../components";
 
 const { width } = Dimensions.get("window");
 
-const Product = ({navigation, route}) => {
+const Product = ({ route}) => {
     useEffect(() => {
         _loadProductInfo();
     }, [])
-    
     const [loading, setLoading] = useState(true);
     const [product, setProduct] = useState(route.params.product);
     const [loadedReviews, setLoadedReviews] = useState({
@@ -43,7 +41,15 @@ const Product = ({navigation, route}) => {
         moreAvailable: true
     });
     const [channel, setChannel] = useState({});
+    const navigation = useNavigation();
 
+    const _navigateToReviews = () => {
+        navigation.navigate("Reviews", { product, reviews: loadedReviews.reviews})
+    };
+
+    const _navigateToCreateReview = () => {
+        navigation.navigate("Write Review")
+    }
     const _loadProductInfo = async () => {
         const { id } = route.params.product;
         try{
@@ -79,7 +85,20 @@ const Product = ({navigation, route}) => {
                         <Typography fontSize={20} style={{ marginBottom: 10 }}>{product.name}</Typography>
                         <Category cat={product.cat} />
                     </View>
-                    <Typography fontSize={16} numberOfLines={2}>{product.description}</Typography>
+                    <Typography
+                        fontSize={18}
+                        fontWeight={"400"}
+                        style={{ marginBottom: 10 }}
+                    >
+                        ${product.price}
+                    </Typography>
+                    <Typography
+                        fontSize={16}
+                        numberOfLines={3}
+                        style={{ marginBottom: 10 }}
+                    >
+                        {product.description}
+                    </Typography>
                     <View style={[styles.row, styles.justifyBetween, {marginTop: 10}]}>
                         <View style={styles.alignCenter}>
                             <MaterialCommunityIcons name="comment-question-outline" size={24} color="black" />
@@ -87,7 +106,7 @@ const Product = ({navigation, route}) => {
                         </View>
 
                         <View style={styles.alignCenter}>
-                            <MaterialIcons name="rate-review" size={24} color={colors.primary} />
+                            <MaterialIcons onPress={_navigateToCreateReview} name="rate-review" size={24} color={colors.primary} />
                             <Typography>Submit a Review</Typography>
                         </View>
 
@@ -106,17 +125,13 @@ const Product = ({navigation, route}) => {
                         </View>
                     </View>               
                 </View>
-                
-                
                 <View style={[styles.row, styles.justifyBetween, styles.content]}>
-                    <View style={styles.alignCenter}>
-                        <View style={[styles.row]}>
-                            <FontAwesome name="star" color="#FFBA5A" size={12} />
-                            <Typography style={{ marginLeft: 4, color: "#FFBA5A" }}>
-                                {product.average_rate}
-                            </Typography>
+                    <View>
+                        <View style={[styles.row, styles.alignCenter]}>
+                            <Typography style={{ marginRight: 8}} fontSize={20}>{product.average_rate}</Typography>
+                            <Ratings value={product.average_rate} readOnly />
                         </View>
-                        <Typography style={{ marginLeft: 20, color: "#FFBA5A" }}>
+                        <Typography fontSize={16} style={{ marginTop: 5}}>
                             {product.total_reviews} Total Ratings
                         </Typography>
                     </View>
@@ -143,19 +158,37 @@ const Product = ({navigation, route}) => {
 
     const renderReviews = () => {
         const { reviews } = loadedReviews;
-        return (
-            <ScrollView horizontal style={styles.reviewList}>
-               {reviews.map(review => (
-                   <View style={[styles.content, styles.review]}>
-                      <Typography numberOfLines={5} fontSize={16}>{review.body}</Typography>
-                   </View>
-               ))}
-            </ScrollView>
-        )
+        if(reviews.length > 0){
+            return (
+                <View style={{backgroundColor: "white"}}>
+                    <View style={{...styles.row, ...styles.justifyBetween, padding: 15}}>
+                        <Typography fontSize={20} fontWeight={"600"}>{`Rates & Reviews`}</Typography>
+                        <UButton onPress={_navigateToReviews}>See All</UButton>
+                    </View>
+                    <ScrollView horizontal bounces={false}>
+                        {reviews.map(review => (
+                            <Review review={review} key={review.id} />
+                        ))}
+                    </ScrollView>
+                </View>
+            )
+        } else {
+            return <></>
+        }
+        
     };
 
     const renderQuestions = () => {
-
+        const { questions } = loadedQuestions;
+        return (
+            <ScrollView horizontal>
+                {questions.map(question => (
+                    <View style={[styles.content, styles.review]}>
+                        <Typography numberOfLines={5} fontSize={16} fontWeight="500">{question.body}</Typography>
+                    </View>
+                ))}
+            </ScrollView>
+        )
     };
     return (
         <ScrollView style={styles.container}>
@@ -169,7 +202,7 @@ const Product = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 1
     },
     content: {
         backgroundColor: "white",
@@ -189,10 +222,5 @@ const styles = StyleSheet.create({
     alignCenter:{
         alignItems: "center"
     },
-    review: {
-        width: 250,
-        marginHorizontal: 5
-    }
-
 });
 export default Product;

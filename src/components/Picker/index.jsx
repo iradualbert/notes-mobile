@@ -1,11 +1,11 @@
 import React from "react";
 import { 
     View,
-    Picker,
     StyleSheet,
     Text 
 } from "react-native";
-import { sizes } from "../../constants"
+import { Picker } from '@react-native-community/picker'
+import { sizes } from "../../constants";
 
 
 const Select  = ({
