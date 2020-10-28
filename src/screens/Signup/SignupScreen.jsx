@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../redux/actions/userActions";
 import {
     Button,
     Input,
+    Typography,
+    UButton,
     KeyboardScreen
 } from "../../components";
 
@@ -66,6 +68,10 @@ const Signup = (props) => {
             >
                 Signup
             </Button>
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 10}}>
+                <Typography fontSize={16}>Already have an account?</Typography>
+                <UButton onPress={() => navigation.navigate("Login")}>Log In</UButton>
+            </View>
         </KeyboardScreen>
     )
 };

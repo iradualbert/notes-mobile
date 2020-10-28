@@ -3,7 +3,7 @@ import { ScrollView } from "react-native";
 
 const Screen = ({children}) => {
     return (
-        <ScrollView>
+        <ScrollView style={{ padding: 5}}>
          {children}
         </ScrollView>
     )

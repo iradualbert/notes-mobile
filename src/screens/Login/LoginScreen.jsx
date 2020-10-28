@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/actions/userActions";
 import {
     Button,
     Input,
-    KeyboardScreen
+    KeyboardScreen,
+    Typography,
+    UButton
 } from "../../components";
+import { colors } from "../../constants";
 
 const Login = props => {
     const { navigation } = props;
@@ -34,16 +37,14 @@ const Login = props => {
             <Button
                 disabled={!(username && password)}
                 onPress={() => _login()}
+                bg={colors.primary}
             >
                 Login
             </Button>
-            <Button onPress={() => navigation.navigate("Signup")}>
-                Signup
-            </Button>
-            <Button onPress={() => navigation.navigate("Home")}>
-                Home
-            </Button>
-
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 10}}>
+                <Typography fontSize={16}>Don't have an account?</Typography>
+                <UButton onPress={() => navigation.navigate("Signup")}>Sign Up</UButton>
+            </View>
         </KeyboardScreen>
     )
 };

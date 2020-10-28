@@ -10,7 +10,7 @@ import Loading from "./src/components/Loading";
 const localUrl = "http://127.0.0.1:8000/api";
 const hostedUrl = "https://notepark.herokuapp.com/api";
 if(Platform.OS === "web"){
-  axios.defaults.baseURL = localUrl;
+  axios.defaults.baseURL = hostedUrl;
 } else {
   axios.defaults.baseURL = hostedUrl
 };

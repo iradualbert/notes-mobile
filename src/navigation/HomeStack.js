@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { TouchableOpacity, Text } from "react-native";
 import {
     Home,
     Product,
@@ -19,11 +18,7 @@ const HomeStackScreen = () => {
     
     return (
         <HomeStack.Navigator
-            mode="modal"
-            screenOptions={{
-                gestureEnabled: true,
-                headerBackTitleVisible: false
-            }}
+            
         >
 
             <HomeStack.Screen

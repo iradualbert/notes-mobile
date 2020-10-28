@@ -1,23 +1,16 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React from 'react';
+import { createStackNavigator } from "@react-navigation/stack";
+import { 
+    LibraryScreen
+} from "../screens/Library";
 
-export default function Library() {
+const Stack = createStackNavigator();
+
+const LibraryStack = () => {
     return (
-        <View style={styles.container}>
-            <Text>Libray coming soon</Text>
-            <Text>Saved</Text>
-            <Text>Questions</Text>
-            <Text>Reviews</Text>
-            <Text>Answers</Text>
-        </View>
+        <Stack.Navigator>
+            <Stack.Screen name="Library" component={LibraryScreen} />
+        </Stack.Navigator>
     )
-}
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    }
-})
+};
+export default LibraryStack;

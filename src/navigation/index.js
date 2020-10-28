@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialIcons } from "@expo/vector-icons";
 // stacks
 import AuthStackScreen from "./AuthStack";
@@ -11,9 +12,12 @@ import HomeStackScreen from "./HomeStack";
 import LibraryStack from './LibraryStack';
 import NotificationStack from './NotificationStack';
 import NearbyStack from "./NearbyStack";
-import NewProductStack from "../screens/NewProduct";
+import {
+    NewProduct
+} from "../screens";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 const MainTabs = () => {
     return (
         <Tab.Navigator
@@ -68,11 +72,13 @@ const Navigator = () => {
     }, [isAuthenticated, token])
     return (
         <NavigationContainer>
-            <Tab.Navigator>
-                <Tab.Screen name="Home" component={MainTabs} options={{ tabBarVisible: false }} />
-                <Tab.Screen name="New Product" component={NewProductStack} options={{ tabBarVisible: false }} />
-                <Tab.Screen name="Auth" component={AuthStackScreen} options={{ tabBarVisible: false }} />
-            </Tab.Navigator>
+            <Stack.Navigator
+                screenOptions={{headerShown: false}}
+            >
+                <Stack.Screen name="Home" component={MainTabs} />
+                <Stack.Screen name="Auth" component={AuthStackScreen} />
+                <Stack.Screen name="New Product" component={NewProduct} /> 
+            </Stack.Navigator>
         </NavigationContainer>
     )
 };

@@ -1,53 +1,70 @@
 import React from "react";
 import {
     View,
-    TouchableOpacity,
     Text, 
-    StyleSheet
+    StyleSheet,
+    TouchableWithoutFeedback
 } from "react-native";
 import { sizes, colors } from "../../constants";
-const styles = StyleSheet.create({
-    button: {
-        borderRadius: sizes.radius,
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 5,
-        marginTop: 10
-        
-    },
-    text: {
-        fontSize: 18,
-    }
-});
 
 /**
  *
- * @param {{style: object, onPress: function, disabled: boolean, color: string }} props
+ * @param {{style: object, onPress: function, disabled: boolean, bg: string }} props
  */
-export default function ({
+
+function Button({
     children,
     style,
     onPress,
-    disabled,
-    ...rest
-}) {
-    const renderChildren = () => typeof children === "string" ?
-        <Text {...rest} style={styles.text}>{children}</Text>
-        : {children}
-
+    underlined = false,
+    disabled = false,
+    bg,
+    ...props
+}){
+    const renderChildren = () => {
+        if (typeof children === "string") {
+            return <Text style={styles.text}>{children}</Text>
+        } else {
+            return children
+        }
+    };
     const buttonStyles = [
         styles.button,
-        style,
-        !style && {backgroundColor: colors.gray2},
-        disabled && {backgroundColor: colors.light}
-    ]
-    const _onPress = disabled ? () => {} : onPress;
+        { backgroundColor: (!bg || disabled) ? colors.light2 : bg},
+    ];
+    const handlePress = () => {
+        if (disabled) return;
+        if (typeof onPress === "function") {
+            onPress()
+        }
+    }
     return (
-        <View style={buttonStyles}>
-            <TouchableOpacity onPress={_onPress}>
+        <TouchableWithoutFeedback onPress={handlePress}>
+            <View
+                style={buttonStyles}
+                {...props}
+            >
                 {renderChildren()}
-            </TouchableOpacity>
-        </View>
+            </View>
+        </TouchableWithoutFeedback>
     )
 };
+
+const styles = StyleSheet.create({
+    button: {
+        height: 50,
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        marginVertical: sizes.paddingMd / 3,
+        borderRadius: sizes.paddingSM
+    },
+    text: {
+        fontSize: 20,
+        fontWeight: "500"
+    }
+})
+
+
+export default Button;
 export { default as UButton } from "./UButton";
