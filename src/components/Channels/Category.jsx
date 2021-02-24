@@ -1,11 +1,12 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { colors } from "../../constants";
+import Typography from "../Typography";
 
 
 const Category = ({cat}) => {
     return (
-        <Text style={styles.cat}>{cat}</Text>
+        <Typography style={styles.cat}>{cat}</Typography>
     )
 };
 

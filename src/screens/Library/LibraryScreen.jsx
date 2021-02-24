@@ -31,13 +31,13 @@ const LibraryScreen = (props) => {
             navigateTo: "Saved",
             count: data.saved
         },
-        {
-            name: "Collections",
-            IconType: icons.fa,
-            IconName: "list",
-            navigateTo: "Collections",
-            count: data.saved
-        },
+        // {
+        //     name: "Collections",
+        //     IconType: icons.fa,
+        //     IconName: "list",
+        //     navigateTo: "Collections",
+        //     count: data.collections
+        // },
         {
             name: "Subscriptions",
             IconType: icons.mci,
@@ -66,10 +66,11 @@ const LibraryScreen = (props) => {
         if (user.isAuthenticated === false) {
             setLoading(false)
         } else {
-            axios.get('user/info')
+            axios.get('user/library')
                 .then(res => {
                     console.log(res.data);
                     setLoading(false);
+                    setData(res.data)
                 })
                 .catch(err => {
                     console.error(err)
@@ -103,11 +104,13 @@ const LibraryScreen = (props) => {
                                         </Typography>
                                     </View>
                                     <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                        <Typography style={{
-                                            fontSize: 16,
-                                            backgroundColor: colors.gray2,
-                                        }}
-                                        >{Tab.count}</Typography>
+                                        <View style={styles.count}>
+                                            <Typography style={{
+                                                fontSize: 16,
+                                                textAlign: "center",
+                                                fontWeight: "bold"
+                                            }} >{Tab.count}</Typography>
+                                        </View>
                                         <FontAwesome
                                             name="angle-right"
                                             size={24}
@@ -136,7 +139,14 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderStyle: "solid",
         borderColor: colors.light2
+    },
+    count: {
+        backgroundColor: colors.gray2,
+        borderRadius: 15,
+        padding: sizes.paddingSM / 2,
+        height: 30,
+        width: 30,
     }
-})
+});
 
 export default LibraryScreen;
